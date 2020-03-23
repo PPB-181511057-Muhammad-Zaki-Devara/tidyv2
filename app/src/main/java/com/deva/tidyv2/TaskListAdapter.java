@@ -10,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +23,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyView
     //Menyimpan cached tasks
     private List<Task> mTasks;
     private final LayoutInflater mInflater;
+    private TaskViewModel vm;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         public ConstraintLayout constraintLayout;
@@ -30,7 +33,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyView
         }
     }
 
-    public TaskListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    public TaskListAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+        vm = new ViewModelProvider((MainActivity)context).get(TaskViewModel.class);
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -49,7 +55,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyView
             Task current = mTasks.get(position);
             task.setText(current.getName());
             dueDate.setText(new SimpleDateFormat("dd MMM yyyy").format(current.getDueTimestamp()));
-            dueTime.setText(new SimpleDateFormat("hh:mm").format(current.getDueTimestamp()));
+            dueTime.setText(new SimpleDateFormat("kk:mm").format(current.getDueTimestamp()));
             task.setChecked(current.isDone() ? true: false);
         } else {
             task.setText("No Task");
@@ -59,6 +65,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyView
         task.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTasks.get(pos).setDone(isChecked);
+                vm.update(mTasks.get(pos));
             }
         });
     }

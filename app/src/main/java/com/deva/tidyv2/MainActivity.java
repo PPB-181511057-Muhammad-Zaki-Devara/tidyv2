@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view){
         Intent i = new Intent("com.deva.tidy.AddTaskActivity");
         Bundle b = new Bundle();
-//        b.putInt("taskNumber", myDataset.size()+1);
+        b.putInt("taskNumber", mTaskViewModel.getAllTasks().getValue().size()+1);
         i.putExtras(b);
         startActivityForResult(i, ADD_TASK_REQUEST_CODE);
     }
@@ -68,12 +68,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        for(int i = 0; i < mTaskViewModel.getAllTasks().getValue().size(); i++){
-            Task t = mTaskViewModel.getAllTasks().getValue().get(i);
-            mTaskViewModel.update(t);
-        }
-    }
 }

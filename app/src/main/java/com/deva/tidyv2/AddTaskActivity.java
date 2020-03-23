@@ -31,7 +31,7 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.add_task);
         Bundle b = getIntent().getExtras();
 
-        Toast.makeText(this, Integer.toString(b.getInt("taskNumber")),
+        Toast.makeText(this, "Task " + Integer.toString(b.getInt("taskNumber")),
                 Toast.LENGTH_SHORT).show();
 
         taskName = (EditText) findViewById(R.id.taskName);
